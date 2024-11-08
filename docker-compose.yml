@@ -20,8 +20,8 @@ services:
     networks:
       - jupyterhub-network
     #if db upgrade is needed
-    #command: >
-    #  sh -c "jupyterhub upgrade-db && jupyterhub -f /srv/jupyterhub/jupyterhub_config.py"
+    command: >
+      sh -c "jupyterhub upgrade-db && jupyterhub -f /srv/jupyterhub/jupyterhub_config.py"
 
   fail2ban:
     container_name: fail2ban_jupyterhub
@@ -39,7 +39,8 @@ services:
     volumes:
       - ./fail2ban:/data
       - ./jupyter_config/logs:/var/log:ro
-
+    depends_on:
+      - jupyterhub
 
   slack-notifier:
     build:
@@ -51,7 +52,8 @@ services:
       - DATABASE_FILE=/data/jupyterhub.sqlite
       - SLACK_WEBHOOK_URL
     restart: unless-stopped
-
+    depends_on:
+      - jupyterhub
 
 networks:
   jupyterhub-network:
