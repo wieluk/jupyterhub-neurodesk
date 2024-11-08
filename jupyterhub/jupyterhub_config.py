@@ -15,7 +15,9 @@ c.JupyterHub.extra_log_file = '/srv/jupyterhub/logs/jupyterhub.log'
 c.JupyterHub.authenticator_class = 'native'
 c.JupyterHub.template_paths = [f"{os.path.dirname(nativeauthenticator.__file__)}/templates/"]
 
-c.NativeAuthenticator.tos = 'Add your TOS here'
+# If you want to have a checkbox with Terms of service on Signup
+#c.NativeAuthenticator.tos = 'Add your TOS here'
+
 c.NativeAuthenticator.minimum_password_length = 8
 c.NativeAuthenticator.check_common_password = True
 c.NativeAuthenticator.allowed_failed_logins = 5
