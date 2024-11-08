@@ -29,16 +29,15 @@ This setup is designed for research or educational institutions where users need
    docker network create jupyterhub-network
    ```
    
-5. **Use Docker Compose**:
+3. **Use Docker Compose**:
    
    ```bash
    docker compose up -d
    ```
 
-7. **Create Admin User**
+4. **Create Admin User**
    
-   Go to `localhost:8000` or `serverip:port_you_choose` in docker compose
-   sign up as `admin`
+   Go to `localhost:8000` or `serverip:port_you_choose` in your browser and sign up as `admin`.
 
 
 **Note** The first start of neurodesk will take some time. The docker image needs to be downloaded.
