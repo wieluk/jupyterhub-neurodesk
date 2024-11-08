@@ -17,25 +17,31 @@ This setup is designed for research or educational institutions where users need
 ### Installation
 
 1. **Clone the Repository**:
+
    ```bash
    git clone https://github.com/wieluk/jupyterhub-neurodesk.git
    cd jupyterhub-neurodesk
    ```
 
-2. **Create docker network**
+3. **Create docker network**
+   
    ```bash
    docker network create jupyterhub-network
    ```
-3. **Use Docker Compose**:
+   
+5. **Use Docker Compose**:
+   
    ```bash
    docker compose up -d
    ```
 
-4. **Create Admin User**
+7. **Create Admin User**
+   
    Go to `localhost:8000` or `serverip:port_you_choose` in docker compose
    sign up as `admin`
 
-5. The first start of neurodesk will take some time. The docker image needs to be downloaded.
+
+**Note** The first start of neurodesk will take some time. The docker image needs to be downloaded.
 
 ### Configuration
 
