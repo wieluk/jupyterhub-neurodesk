@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   jupyterhub:
     image: custom-jupyterhub
@@ -14,12 +16,17 @@ services:
       - "8000:8000"
       #- "443:8000" #with cert
     environment:
-      - JUPYTERHUB_CONFIG=/srv/jupyterhub/jupyterhub_config.py # This is a directory in your container do not change unless you change in jupyterhub_config.py aswell.
-      - BASE_USER_DIR=/path/to/user/dir # This is a directory on your host system. Please change.
+      - JUPYTERHUB_CONFIG=/srv/jupyterhub/jupyterhub_config.py # This is a directory in your container; do not change unless you change in jupyterhub_config.py as well.
+      - BASE_USER_DIR=/path/to/user/dir # Update this to the user directory on your host system.
     restart: unless-stopped
     networks:
       - jupyterhub-network
-    #if db upgrade is needed
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/hub/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     command: >
       sh -c "jupyterhub upgrade-db && jupyterhub -f /srv/jupyterhub/jupyterhub_config.py"
 
@@ -30,7 +37,7 @@ services:
       - NET_RAW
     environment:
       - TZ=Europe/Vienna
-      - F2B_DB_PURGE_AGE=14d#
+      - F2B_DB_PURGE_AGE=14d
       - F2B_LOG_TARGET=/data/logs/fail2ban.log
       - SLACK_WEBHOOK_URL
     image: crazymax/fail2ban:latest
@@ -40,7 +47,8 @@ services:
       - ./fail2ban:/data
       - ./jupyter_config/logs:/var/log:ro
     depends_on:
-      - jupyterhub
+      jupyterhub:
+        condition: service_healthy
 
   slack-notifier:
     build:
@@ -53,7 +61,8 @@ services:
       - SLACK_WEBHOOK_URL
     restart: unless-stopped
     depends_on:
-      - jupyterhub
+      jupyterhub:
+        condition: service_healthy
 
 networks:
   jupyterhub-network:
