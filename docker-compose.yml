@@ -15,7 +15,7 @@ services:
       ### If you want to pass server users to jupyterhub
       #- /etc/passwd:/etc/passwd:ro  
     ports:
-      - "8000:8000"´
+      - "8000:8000"
       
       ### HTTPS
       #- "443:8000" 
