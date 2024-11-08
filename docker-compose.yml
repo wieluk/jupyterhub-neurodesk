@@ -55,7 +55,7 @@ services:
       context: ./slack_notify_docker
     container_name: slack_notifier_jupyterhub
     volumes:
-      - ./jupyter_config/jupyterhub.sqlite:/data/jupyterhub.sqlite:ro
+      - ./jupyter_config:/data:ro
     environment:
       - DATABASE_FILE=/data/jupyterhub.sqlite
       - SLACK_WEBHOOK_URL
