@@ -1,0 +1,12 @@
+[DEFAULT]
+ignoreip = 127.0.0.1/8 ::1
+
+[jupyterhub]
+enabled = true
+filter  = jupyterhub
+logpath = /var/log/*.log
+chain = DOCKER-USER
+banaction = notify-slack
+maxretry = 5
+findtime = 600
+bantime = 30

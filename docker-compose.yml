@@ -1,0 +1,57 @@
+services:
+  jupyterhub:
+    image: custom-jupyterhub
+    container_name: jupyterhub
+    build:
+      context: ./custom_jupyterhub_image
+    volumes:
+      #- /etc/letsencrypt/fullchain.pem:/etc/letsencrypt/fullchain.pem
+      #- /etc/letsencrypt/privkey.pem:/etc/letsencrypt/privkey.pem
+      - ./jupyter_config:/srv/jupyterhub
+      - /var/run/docker.sock:/var/run/docker.sock
+      #- /etc/passwd:/etc/passwd:ro  # If you want to pass users to jupyterhub
+    ports:
+      - "8000:8000"
+      #- "443:8000" #with cert
+    environment:
+      - JUPYTERHUB_CONFIG=/srv/jupyterhub/jupyterhub_config.py
+    restart: unless-stopped
+    networks:
+      - jupyterhub-network
+    #if db upgrade is needed
+    #command: >
+    #  sh -c "jupyterhub upgrade-db && jupyterhub -f /srv/jupyterhub/jupyterhub_config.py"
+
+  fail2ban:
+    container_name: fail2ban_jupyterhub
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      - TZ=Europe/Vienna
+      - F2B_DB_PURGE_AGE=14d#
+      - F2B_LOG_TARGET=/data/logs/fail2ban.log
+      - SLACK_WEBHOOK_URL
+    image: crazymax/fail2ban:latest
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./fail2ban:/data
+      - ./jupyter_config/logs:/var/log:ro
+
+
+  slack-notifier:
+    build:
+      context: ./slack_notify_docker
+    container_name: slack_notifier_jupyterhub
+    volumes:
+      - ./jupyter_config/jupyterhub.sqlite:/data/jupyterhub.sqlite:ro
+    environment:
+      - DATABASE_FILE=/data/jupyterhub.sqlite
+      - SLACK_WEBHOOK_URL
+    restart: unless-stopped
+
+
+networks:
+  jupyterhub-network:
+    external: true
