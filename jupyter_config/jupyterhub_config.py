@@ -4,6 +4,8 @@ import nativeauthenticator
 import sys
 import logging
 
+base_user_dir = os.getenv('BASE_USER_DIR')
+
 c.JupyterHub.log_level = logging.INFO
 c.Spawner.debug = False
 c.JupyterHub.extra_log_file = '/srv/jupyterhub/logs/jupyterhub.log'
@@ -52,10 +54,6 @@ c.DockerSpawner.notebook_dir = '/home/jovyan'
 ### Timeout increase to download images
 c.Spawner.http_timeout = 180
 c.Spawner.start_timeout = 300
-
-### Base directory for user data on the host 
-### This is a directory on your HOST MACHINE
-base_user_dir = '/storage/neurodesk/users'
 
 ### Customize container name template
 c.DockerSpawner.name_template = 'jupyterhub-{username}'
@@ -124,7 +122,7 @@ c.DockerSpawner.extra_create_kwargs.update({'user': 'root'})
 ### Add required capabilities and security options
 c.DockerSpawner.extra_host_config = {
     'privileged': True,
-    'shm_size': '16g',
+    'shm_size': '2g',
 }
 
 ### Configure connect ip for internal Docker network
