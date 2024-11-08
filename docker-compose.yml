@@ -5,21 +5,24 @@ services:
     build:
       context: ./custom_jupyterhub_image
     volumes:
+      - ./jupyterhub:/srv/jupyterhub
+      - /var/run/docker.sock:/var/run/docker.sock
+      
       ### Https setup
       #- /etc/letsencrypt/fullchain.pem:/etc/letsencrypt/fullchain.pem
       #- /etc/letsencrypt/privkey.pem:/etc/letsencrypt/privkey.pem
-      - ./jupyter_config:/srv/jupyterhub
-      - /var/run/docker.sock:/var/run/docker.sock
       
-      # If you want to pass users to jupyterhub
+      ### If you want to pass server users to jupyterhub
       #- /etc/passwd:/etc/passwd:ro  
     ports:
       - "8000:8000"´
+      
       ### HTTPS
       #- "443:8000" 
     environment:
       ### This is a directory in your container; do not change unless you change in jupyterhub_config.py as well.
       - JUPYTERHUB_CONFIG=/srv/jupyterhub/jupyterhub_config.py 
+      
       ### Change this path to where the container user_dirs should be saved.
       - BASE_USER_DIR=/neurodesk/users
     restart: unless-stopped
@@ -51,7 +54,7 @@ services:
   #   restart: unless-stopped
   #   volumes:
   #     - ./fail2ban:/data
-  #     - ./jupyter_config/logs:/var/log:ro
+  #     - ./jupyterhub/logs:/var/log:ro
   #   depends_on:
   #     jupyterhub:
   #       condition: service_healthy
@@ -61,7 +64,7 @@ services:
   #     context: ./slack_notify_docker
   #   container_name: slack_notifier_jupyterhub
   #   volumes:
-  #     - ./jupyter_config/jupyterhub.sqlite:/data/jupyterhub.sqlite:ro
+  #     - ./jupyterhub/jupyterhub.sqlite:/data/jupyterhub.sqlite:ro
   #   environment:
   #     - DATABASE_FILE=/data/jupyterhub.sqlite
   #     - SLACK_WEBHOOK_URL

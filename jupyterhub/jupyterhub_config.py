@@ -40,16 +40,14 @@ c.DockerSpawner.allowed_images = [
     'vnmd/neurodesktop:2024-01-12',
     'vnmd/neurodesktop:2023-11-28',
     'vnmd/neurodesktop:2023-09-20',
-#    'jupyter/datascience-notebook',
-#    'jupyter/base-notebook',
 ]
 
 c.DockerSpawner.remove = True
 c.DockerSpawner.notebook_dir = '/home/jovyan'
 
 ### Per user limits:
-#c.DockerSpawner.mem_limit = '256G'
-#c.DockerSpawner.cpu_limit = 20
+#c.DockerSpawner.mem_limit = '8G'
+#c.DockerSpawner.cpu_limit = 4
 
 ### Timeout increase to download images
 c.Spawner.http_timeout = 180
@@ -58,7 +56,6 @@ c.Spawner.start_timeout = 300
 ### Customize container name template
 c.DockerSpawner.name_template = 'jupyterhub-{username}'
 #c.DockerSpawner.name_template = 'Hub-{username}-{imagename}'
-
 
 
 def create_user_directory(spawner):
@@ -72,12 +69,10 @@ def create_user_directory(spawner):
     }
 
 
-
 ### If you want to pass server users to jupyterhub and give them permissions like on the server.
 
 #storage_dir='/storage' # Users wanted to acces whole /storage
 #shared_dir='/storage/neurodesk/shared' # Shared dir for users that exist on server and neurodesk
-#license_file = '/storage/neurodesk/license'
 #import pwd
 
 # def create_user_directory(spawner):
