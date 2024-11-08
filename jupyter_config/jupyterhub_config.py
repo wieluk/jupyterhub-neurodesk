@@ -64,11 +64,11 @@ c.DockerSpawner.name_template = 'jupyterhub-{username}'
 def create_user_directory(spawner):
     username = spawner.user.name
     user_dir = os.path.join(base_user_dir, username)
-
+    if not os.path.exists(user_dir):
+        os.makedirs(user_dir, mode=0o755)
+    
     spawner.volumes = {
         user_dir: '/home/jovyan',
-        storage_dir: '/storage',
-        shared_dir: '/shared',
     }
 
 
