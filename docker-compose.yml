@@ -14,8 +14,8 @@ services:
       - "8000:8000"
       #- "443:8000" #with cert
     environment:
-      - JUPYTERHUB_CONFIG=/srv/jupyterhub/jupyterhub_config.py
-      - BASE_USER_DIR=/path/to/user/dir
+      - JUPYTERHUB_CONFIG=/srv/jupyterhub/jupyterhub_config.py # This is a directory in your container do not change unless you change in jupyterhub_config.py aswell.
+      - BASE_USER_DIR=/path/to/user/dir # This is a directory on your host system. Please change.
     restart: unless-stopped
     networks:
       - jupyterhub-network
