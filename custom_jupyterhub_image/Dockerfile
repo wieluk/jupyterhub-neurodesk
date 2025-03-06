@@ -5,3 +5,4 @@ FROM jupyterhub/jupyterhub:5.2.1
 RUN pip install jupyterhub-nativeauthenticator
 RUN pip install dockerspawner
 RUN pip install jupyterhub-idle-culler
+RUN pip install requests

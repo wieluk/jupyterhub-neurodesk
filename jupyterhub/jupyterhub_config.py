@@ -1,8 +1,11 @@
 from dockerspawner import DockerSpawner
 import os
 import nativeauthenticator
+#import pwd
+#import grp
 import sys
 import logging
+import requests
 
 base_user_dir = os.getenv('BASE_USER_DIR')
 
@@ -11,7 +14,7 @@ c.Spawner.debug = False
 c.JupyterHub.extra_log_file = '/srv/jupyterhub/logs/jupyterhub.log'
 
 
-### Set the authenticator class to NativeAuthenticator
+# Set the authenticator class to NativeAuthenticator
 c.JupyterHub.authenticator_class = 'native'
 c.JupyterHub.template_paths = [f"{os.path.dirname(nativeauthenticator.__file__)}/templates/"]
 
@@ -26,23 +29,43 @@ c.NativeAuthenticator.ask_email_on_signup = True
 c.Authenticator.allow_all = True
 #c.NativeAuthenticator.allow_2fa = True
 
-### Enable self-signup
+# Enable self-signup
 c.NativeAuthenticator.enable_signup = True
-### Require admin approval for new users
+# Require admin approval for new users
 c.NativeAuthenticator.open_signup = False
 
-### Configure DockerSpawner
+
+def get_neurodesktop_tags():
+    repo_name = "vnmd/neurodesktop"
+    base_url = f"https://hub.docker.com/v2/repositories/{repo_name}/tags"
+    
+    fixed_top_tags = ["quay.io/jupyter/base-notebook:latest", "vnmd/neurodesktop:latest", "neurodesktop-custom"]
+    tags = set()
+    url = base_url
+
+    try:
+        while url:
+            response = requests.get(url, timeout=2)
+            if response.status_code == 200:
+                data = response.json()
+                for tag_info in data.get('results', []):
+                    tag_name = tag_info['name']
+                    if tag_name.lower() != "latest": 
+                        tags.add(f"{repo_name}:{tag_name}")
+                url = data.get('next')
+            else:
+                break
+    except Exception:
+        pass
+
+    sorted_tags = sorted(tags, reverse=True)
+    return fixed_top_tags + sorted_tags
+
+# Configure DockerSpawner
 c.JupyterHub.spawner_class = DockerSpawner
 
-c.DockerSpawner.allowed_images = [
-    'vnmd/neurodesktop:latest',
-    'vnmd/neurodesktop:2024-10-16',
-    'vnmd/neurodesktop:2024-05-25',
-    'vnmd/neurodesktop:2024-03-27',
-    'vnmd/neurodesktop:2024-01-12',
-    'vnmd/neurodesktop:2023-11-28',
-    'vnmd/neurodesktop:2023-09-20',
-]
+# Dynamically fetch available images (with a fallback)
+c.DockerSpawner.allowed_images = get_neurodesktop_tags()
 
 c.DockerSpawner.remove = True
 c.DockerSpawner.notebook_dir = '/home/jovyan'
