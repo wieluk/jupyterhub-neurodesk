@@ -30,7 +30,8 @@ This setup is designed for research or educational institutions where users need
    ```
    
 3. **Edit .env**
-Open `.env` and ensure `BASE_USER_DIR` is set to the directory where you want to save user data. This is where each user’s data will be stored persistently on the host machine.
+
+   Open `.env` and ensure `BASE_USER_DIR` is set to the directory where you want to save user data. This is where each user’s data will be stored persistently on the host machine.
 
 4. **Use Docker Compose**:
    
