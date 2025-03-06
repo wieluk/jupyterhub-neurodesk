@@ -39,7 +39,7 @@ def get_neurodesktop_tags():
     repo_name = "vnmd/neurodesktop"
     base_url = f"https://hub.docker.com/v2/repositories/{repo_name}/tags"
     
-    fixed_top_tags = ["quay.io/jupyter/base-notebook:latest", "vnmd/neurodesktop:latest", "neurodesktop-custom"]
+    fixed_top_tags = ["vnmd/neurodesktop:latest"]
     tags = set()
     url = base_url
 

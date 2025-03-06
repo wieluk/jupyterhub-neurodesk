@@ -23,8 +23,8 @@ services:
       ### This is a directory in your container; do not change unless you change in jupyterhub_config.py as well.
       - JUPYTERHUB_CONFIG=/srv/jupyterhub/jupyterhub_config.py 
       
-      ### Change this path to where the container user_dirs should be saved. !THIS IS A PATH ON YOUR HOST MACHINE!
-      - BASE_USER_DIR=/neurodesk/users
+      ### Change this path in the .env to where the container user_dirs should be saved. !THIS IS A PATH ON YOUR HOST MACHINE!
+      - BASE_USER_DIR=${BASE_USER_DIR}
     restart: unless-stopped
     networks:
       - jupyterhub-network

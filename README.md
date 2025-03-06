@@ -4,7 +4,7 @@ This repository provides a setup to deploy a JupyterHub server that supports Neu
 
 ### Overview
 
-This setup is designed for research or educational institutions where users need access to data science and neuroimaging tools in isolated environments. Each user has a personal directory in `BASE_USER_DIR=/path/to/user/dir` (change this in the docker-compose.yml), enabling persistent storage across sessions. With `NativeAuthenticator`, users can self-register, though admin approval is required for access.
+This setup is designed for research or educational institutions where users need access to data science and neuroimaging tools in isolated environments. Each user has a personal directory in `BASE_USER_DIR=/path/to/user/dir` (change this in the .env), enabling persistent storage across sessions. With `NativeAuthenticator`, users can self-register, though admin approval is required for access.
 
 ### Prerequisites
 
@@ -23,13 +23,16 @@ This setup is designed for research or educational institutions where users need
    cd jupyterhub-neurodesk
    ```
 
-3. **Create docker network**
+2. **Create docker network**
    
    ```bash
    docker network create jupyterhub-network
    ```
    
-3. **Use Docker Compose**:
+3. **Edit .env**
+Open `.env` and ensure `BASE_USER_DIR` is set to the directory where you want to save user data. This is where each user’s data will be stored persistently on the host machine.
+
+4. **Use Docker Compose**:
    
    ```bash
    docker compose up -d
@@ -44,24 +47,11 @@ This setup is designed for research or educational institutions where users need
 
 ### Configuration
 
-#### User Directories
-
-Open `docker-compose.yml` and ensure `BASE_USER_DIR` is set to the directory where you want to save user data. This is where each user’s data will be stored persistently on the host machine.
-
-The configuration will automatically create a new folder for each user under this directory upon login.
-
 #### jupyterhub_config.py
 
-1. **Images**:
-   - The configuration allows multiple versions of the NeuroDesktop image. Users can select from specific tagged versions:
-     ```python
-     c.DockerSpawner.allowed_images = [
-         'vnmd/neurodesktop:latest',
-         'vnmd/neurodesktop:2024-10-16',
-         'vnmd/neurodesktop:2024-05-25',
-         # Additional versions are listed in the file
-     ]
-     ```
+1. **Images**:  
+   - The configuration dynamically fetches all available versions of the NeuroDesktop image from Docker Hub.
+
 2. **Resource Limits**:
    - You can set resource limits for each user’s container by uncommenting and adjusting `mem_limit` and `cpu_limit` in `jupyterhub_config.py`:
      ```python
