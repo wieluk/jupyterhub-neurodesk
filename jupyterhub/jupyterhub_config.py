@@ -138,7 +138,9 @@ c.DockerSpawner.extra_create_kwargs.update({'user': 'root'})
 
 ### Add required capabilities and security options
 c.DockerSpawner.extra_host_config = {
-    'privileged': True,
+    'cap_add': ['SYS_ADMIN'],
+    'security_opt': ['apparmor:unconfined'],
+    'devices': ['/dev/fuse'],
     'shm_size': '2g',
 }
 
