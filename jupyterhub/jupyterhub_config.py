@@ -1,8 +1,6 @@
 from dockerspawner import DockerSpawner
 import os
 import nativeauthenticator
-#import pwd
-#import grp
 import sys
 import logging
 import requests
