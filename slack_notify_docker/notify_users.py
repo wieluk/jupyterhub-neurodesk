@@ -35,7 +35,7 @@ def send_slack_notification(users):
         return
 
     user_list = "\n".join([f"ID: {user[0]}, Username: {user[1]}, Email: {user[2]}" for user in new_users_to_notify])
-    message = f"Jupyterhub New non-authorized users on https://pslg-nv1.uni-graz.at/hub/authorize :\n{user_list}"
+    message = f"Jupyterhub New non-authorized users on your jupyterhub server :\n{user_list}"
 
     print(f"{datetime.now()} - Sending Slack notification with message:\n{message}")
     slack_data = {'text': message}
