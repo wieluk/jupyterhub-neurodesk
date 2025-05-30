@@ -1,5 +1,5 @@
 # Use the official JupyterHub image as the base image
-FROM jupyterhub/jupyterhub:5.2.1
+FROM jupyterhub/jupyterhub:5.3.0
 
 # Install nativeauthenticator and dockerspawner
 RUN pip install jupyterhub-nativeauthenticator
